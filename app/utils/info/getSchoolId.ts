@@ -9,7 +9,7 @@ const getSchoolId = () => {
 
     const i = arr.indexOf("localhost");
     
-    return i > 0 ? arr.slice(0, i)[0] : 'museum';
+    return i > 0 ? arr.slice(0, i)[0] : 'xth';
   
   // Make this work online
   } else if ( host.includes("upsign") ) {
@@ -18,9 +18,9 @@ const getSchoolId = () => {
 
     const j = arr.indexOf("upsign")
     
-    const anticipatedId = j > 0 ? arr.slice(0, j)[0] : 'museum';
+    const anticipatedId = j > 0 ? arr.slice(0, j)[0] : 'xth';
 
-    return anticipatedId !== "www" ? anticipatedId : "museum";
+    return anticipatedId !== "www" ? anticipatedId : "xth";
 
   } else {
     return null
