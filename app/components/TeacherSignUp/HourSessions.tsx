@@ -10,7 +10,7 @@ type HourSessionsParams = {
   selectedDate: Date,
   hour: number,
   sessionTimes: string[] | null | undefined,
-  sessionTitles: string[] | null | undefined,
+  sessionNames: string[] | null | undefined,
   sessions: Session[],
   user: UpsignUser,
   groupOptions: string[]
@@ -23,7 +23,7 @@ const HourSessions = ({
   selectedDate,
   hour,
   sessionTimes,
-  sessionTitles,
+  sessionNames,
   sessions,
   user,
   groupOptions,
@@ -38,14 +38,14 @@ const HourSessions = ({
       setSessionAdding(false);
     });
   }
-
+  console.log(sessionNames)
   return (
     <div key={`session-${hour}-holder`} className="print:break-inside-avoid">
       <div className="prose">
         <h2 className="mt-4 mb-2">
-          {(Array.isArray(sessionTitles) && sessionTitles.length > 0)
-            ? sessionTitles[hour - 1]
-            : `Session ${hour}`}
+          {(Array.isArray(sessionNames) && sessionNames.length > 0)
+            ? sessionNames[hour - 1]
+            : `session ${hour}`}
           <span className="ml-2 font-light opacity-80">
             {(Array.isArray(sessionTimes) && sessionTimes[hour - 1])
               ? `(${sessionTimes[hour - 1]})`

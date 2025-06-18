@@ -12,6 +12,7 @@ import {
   getNumberSessions,
   getTeacherSessions,
   getSessionTitles,
+  getSessionNames,
   getDefaultDay,
   getAllStudents,
 } from "../../services";
@@ -34,7 +35,7 @@ const renderHours = (
   selectedDate: Date | null,
   numberSessions: number,
   sessionTimes: string[],
-  sessionTitles: string[] | null | undefined,
+  sessionNames: string[] | null | undefined,
   sessions: { [key: string]: Session[] },
   user: UpsignUser,
   groupOptions: string[],
@@ -51,19 +52,22 @@ const renderHours = (
   return (<>
     {hourArr.map(hour => {
       return (
+        <>
+        
         <HourSessions
           db={db}
           selectedDate={selectedDate}
           hour={hour}
           key={`hour-${hour}`}
           sessionTimes={sessionTimes}
-          sessionTitles={sessionTitles}
+          sessionNames={sessionNames}
           sessions={sessions[String(hour)]}
           user={user}
           groupOptions={groupOptions}
           hideAdd={hideAdd}
           allStudents={allStudents}
         />
+        </>
       )
     })}
   </>)
@@ -74,7 +78,7 @@ const TeacherSignUp = ({ db, user, groupOptions }: TeacherSignUpProps) => {
   const [numberSessions, setNumberSessions] = useState<number>(1);
   const [selectedDate, setSelectedDate] = useState<Date | null>();
   const [sessionTimes, setSessionTimes] = useState<string[]>([]);
-  const [sessionTitles, setSessionTitles] = useState<string[] | null>();
+  const [sessionTitles, setSessionTitles] = useState<string[]>([])
   const [selectedTeacher, setSelectedTeacher] = useState<string | null>(null);
   const [allStudents, setAllStudents] = useState<UpsignUser[] | undefined>(undefined);
 
@@ -91,8 +95,8 @@ const TeacherSignUp = ({ db, user, groupOptions }: TeacherSignUpProps) => {
   }
 
   const updateSessionTitles = async () => {
-    const newTitles = await getSessionTitles(db, selectedDate)
-    setSessionTitles(newTitles as string[] | null)
+    const newTitles = await getSessionNames(db, selectedDate)
+    setSessionTitles(newTitles ?? []);
   }
 
   const updateAllStudents = async () => {
@@ -193,6 +197,7 @@ const TeacherSignUp = ({ db, user, groupOptions }: TeacherSignUpProps) => {
             selectedTeacher !== null,
             allStudents,
           )}
+          
         </div>
         : <div>Loading...</div>}
     </div>

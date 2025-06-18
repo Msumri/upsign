@@ -9,6 +9,8 @@ installGlobals();
 const config = defineConfig({
   plugins: [remix({ presets: [vercelPreset()] }), tsconfigPaths()],
   server:{
+    // Use the port 5172 for the development server
+    allowedHosts: ['upsing.sumri.net'],
     port:5172
   }
 });

@@ -11,9 +11,13 @@ import setDomainRestriction from "./config/domainRestriction/setDomainRestrictio
 import setSignupAllowed from "./config/signupAllowed/setSignupAllowed";
 import setTeacherRegisterAllowed from "./config/teacherRegister/setTeacherRegisterAllowed";
 import setNumberSessions from "./config/setNumberSessions";
-import setSessionTimes from "./config/setSessionTimes";
+import setSessionTimes from "./config/getSessionTimes";
+// i added those
+import getSessionNames from "./config/getSessionNames"
+import setSessionNames from "./config/setSessionNames"
 
 // Data
+
 import getDefaultDay from "./data/getDefaultDay";
 import getDefaultReactions from './data/getDefaultReactions';
 import getSchoolName from "./data/getSchoolName";
@@ -72,6 +76,9 @@ export {
   setTeacherRegisterAllowed,
   setNumberSessions,
   setSessionTimes,
+  // i added this 
+  getSessionNames,
+  setSessionNames,
   // Data
   getDefaultDay,
   getDefaultReactions,

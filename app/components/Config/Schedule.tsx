@@ -6,20 +6,39 @@ import {
   setNumberSessions,
   getSessionTimes,
   setSessionTimes,
+  getSessionNames,
+  setSessionNames,
 } from "~/services"
 import { numberToArrayOfStrings } from '~/utils';
 
 type ConfigRowProps = {
+  name?: string,
   number: number,
   time: string,
-  handleChange: (arg0: number, arg1: string) => void,
+  handleChangeTime: (arg0: number, arg1: string) => void,
+  handleChangeName: (arg0: number, arg1: string) => void,
+
 }
 
-const SessionsConfigRow = ({ number, time, handleChange }: ConfigRowProps) => {
+const SessionsConfigRow = ({name, number, time, handleChangeTime,handleChangeName }: ConfigRowProps) => {
 
   return (
     <tr>
       <td className="flex justify-center"><b>{number}</b></td>
+      <td >
+        <div className="input-field table-input">
+          <input
+            className="input input-bordered input-md w-full"
+            id={`session-${number}-time`}
+            defaultValue={name}
+            type="text"
+            autoComplete="off"
+            onChange={(e) => handleChangeName(Number(number), e.target.value)}
+          />
+        </div>
+      </td>
+
+      
       <td className="table-input">
         <div className="input-field table-input">
           <input
@@ -28,8 +47,9 @@ const SessionsConfigRow = ({ number, time, handleChange }: ConfigRowProps) => {
             defaultValue={time}
             type="text"
             autoComplete="off"
-            onChange={(e) => handleChange(Number(number), e.target.value)}
+            onChange={(e) => handleChangetTime(Number(number), e.target.value)}
           />
+          
         </div>
       </td>
     </tr>
@@ -43,15 +63,21 @@ type ScheduleConfigProps = {
 const ScheduleConfig = ({ db }: ScheduleConfigProps) => {
   const [numberSessionState, setNumberSessionState] = useState<number>(1);
   const [sessionTimesState, setSessionTimesState] = useState<string[]>([]);
+
   const [sessionsArray, setSessionsArray] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
-
+  ///
+  const [sessionNameState, setSessionNameState] = useState<string[]>([]);
   const updateConfig = async (db: Firestore) => {
     setLoading(true);
     const numberSessionsSetting = await getNumberSessions(db);
     const sessionTimesSetting = await getSessionTimes(db);
+    //you are added
+  const sessionNameSetting =await getSessionNames(db);
+    setSessionNameState(sessionNameSetting);
     setNumberSessionState(numberSessionsSetting);
     setSessionTimesState(sessionTimesSetting);
+    //added this
     setLoading(false);
   }
 
@@ -95,6 +121,25 @@ const ScheduleConfig = ({ db }: ScheduleConfigProps) => {
     }
 
   }
+  // handle name change
+  const handleChangeName = async (session: number, name: string) => {
+    const n = session - 1
+    const nameCopy = sessionNameState
+    // Make sure the Array is long enough to contain the index
+    if (nameCopy[n]) {
+      nameCopy[n] = name
+      setSessionNames(db, nameCopy)
+      setSessionNameState(nameCopy)
+    } else {
+      for (let i = 0; i < n; i++) {
+        nameCopy[i] = nameCopy[i] ?? ""
+      }
+      nameCopy[n] = name
+      setSessionNames(db, nameCopy)
+      setSessionNameState(nameCopy)
+    }
+
+  }
 
   if (loading) {
     return <div>Loading...</div>
@@ -133,22 +178,32 @@ const ScheduleConfig = ({ db }: ScheduleConfigProps) => {
         </button>
 
       </div>
-
+          <div style={{width:"50%", margin:20}}>
+             <input 
+        
+            className="input input-bordered input-md w-full"
+            defaultValue="test"
+            type="text"
+            autoComplete="off"/>
+          </div>
       <h2 className="mt-6">Session Times</h2>
       <div>
         <table className="centered highlight">
           <thead>
             <tr>
               <th>Session</th>
+              <th>name</th>
               <th>Time</th>
             </tr>
           </thead>
           <tbody>
             {sessionsArray.map(s => (
               <SessionsConfigRow
+                name={sessionNameState[Number(s) - 1]}
                 number={Number(s)}
                 time={sessionTimesState[Number(s) - 1]}
-                handleChange={handleChangeTime}
+                handleChangeTime={handleChangeTime}
+                handleChangeName={handleChangeName}
                 key={`table-row-session-${s}`}
               />
             ))}

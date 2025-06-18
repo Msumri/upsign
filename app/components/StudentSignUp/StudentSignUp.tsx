@@ -9,6 +9,8 @@ import {
   getStudentEnrollments,
   getUser,
   getSessionTitles,
+  getSessionNames,
+
 } from "../../services";
 import {
   getDateString,
@@ -49,7 +51,7 @@ const StudentSignUp = ({ db, user }: StudentSignupProps) => {
   }
 
   const updateSessionTitles = async (db: Firestore, selectedDate: Date) => {
-    const newTitles = await getSessionTitles(db, selectedDate);
+    const newTitles = await getSessionNames(db, selectedDate);
     setSessionTitles(newTitles as string[]);
   }
 

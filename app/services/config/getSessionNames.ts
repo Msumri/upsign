@@ -4,7 +4,7 @@ import { getSchoolId } from "../../utils";
 interface SessionConfig {
   number: number;
   times: string[];
-  names: string[];
+  names:string[]
 }
 
 const defaultSessionsConfig: SessionConfig = {
@@ -23,29 +23,29 @@ const defaultSessionsConfig: SessionConfig = {
   ]
 };
 
-const getSessionTimes = async (
+const getSessionNames = async (
   db: Firestore,
-  selectedDate: Date | null = null
+  selectedName: Date | null = null
 ): Promise<string[]> => {
   const schoolId = getSchoolId();
   const sessionsConfigRef = doc(db, `schools/${schoolId}/config/sessions`);
   const sessionConfig = await getDoc(sessionsConfigRef);
 
   if (sessionConfig.exists()) {
-    let times = (sessionConfig.data() as SessionConfig).times;
-    if (selectedDate) {
-      const dateConfigRef = doc(db, `schools/${schoolId}/config/sessions/special_days/${selectedDate.toDateString()}`);
-      const dateConfig = await getDoc(dateConfigRef);
+    let names = (sessionConfig.data() as SessionConfig).names;
+    if (selectedName) {
+      const nameConfigRef = doc(db, `schools/${schoolId}/config/sessions/special_days/${selectedName}`);
+      const nameConfig = await getDoc(nameConfigRef);
 
-      if (dateConfig.exists()) {
-        times = (dateConfig.data() as SessionConfig).times ?? times;
+      if (nameConfig.exists()) {
+        names = (nameConfig.data() as SessionConfig).names ?? names;
       }
     }
-    return times;
+    return names;
   } else {
     await setDoc(sessionsConfigRef, defaultSessionsConfig);
     return [];
   }
 }
 
-export default getSessionTimes;
+export default getSessionNames;

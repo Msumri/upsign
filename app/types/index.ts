@@ -16,6 +16,7 @@ export type Session = {
   teacher_id?: string,
   title?: string,
   created_at?: Date,
+  name?:string,
 }
 
 export type UpsignUser = {
